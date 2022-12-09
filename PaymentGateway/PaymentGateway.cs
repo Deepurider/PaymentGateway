@@ -25,19 +25,19 @@ namespace PaymentGatewayApi
             if (UserAuthentication(context))
             {
                 UserAccount userAccount = new UserAccount(context);
-                if (userAccount.CheckBankAccount(LogggedUser.UserId).AccountId != 0)
+                if (userAccount.CheckBankAccount(LogggedUser.UserId) != null)
                 {
                     BankAccount = userAccount.CheckBankAccount(LogggedUser.UserId);
                     BankAccountTransaction(context);
                     goto start;
                 }
-                else if (userAccount.CheckGoodsAccount(LogggedUser.UserId).AccountId != 0)
+                else if (userAccount.CheckGoodsAccount(LogggedUser.UserId) != null)
                 {
                     GoodsAccount = userAccount.CheckGoodsAccount(LogggedUser.UserId);
                     GoodsAccountTransactions(context);
                     goto start; 
                 }
-                else if (userAccount.CheckSharesAccount(LogggedUser.UserId).AccountId != 0)
+                else if (userAccount.CheckSharesAccount(LogggedUser.UserId) != null)
                 {
                     SharesAccount = userAccount.CheckSharesAccount(LogggedUser.UserId);
                     SharesAccountTransaction(context);
@@ -57,11 +57,17 @@ namespace PaymentGatewayApi
             context.Users.Add(new User { UserId = 2, Name = "Test1", Username = "Test1", Password = "Test1" });
             context.Users.Add(new User { UserId = 3, Name = "Test2", Username = "Test2", Password = "Test2" });
             context.Users.Add(new User { UserId = 4, Name = "Test3", Username = "Test3", Password = "Test3" });
+            context.Users.Add(new User { UserId = 5, Name = "Test4", Username = "Test4", Password = "Test4" });
+            context.Users.Add(new User { UserId = 6, Name = "Test5", Username = "Test5", Password = "Test5" });
 
             context.BankAccount.Add(new BankAccount { AccountId = 1, AccountType = 1, UserId = 1, BalanceAmount = 1000, Currency = "USD" });
             context.BankAccount.Add(new BankAccount { AccountId = 2, AccountType = 2, UserId = 2, BalanceAmount = 2000, Currency = "USD" });
-            context.GoodsAccount.Add(new GoodsAccount { AccountId = 3, AccountType = 3, Amount = 100, UserId = 3, TradingUnit = "gram", Goods = "Test" });
-            context.SharesAccount.Add(new SharesAccount { AccountId = 4, AccountType = 1, amount = 50, UserId = 4, ShareholderPercentage = 76, Share = "Test Share", bonds = "Test" });
+
+            context.GoodsAccount.Add(new GoodsAccount { AccountId = 3, AccountType = 3, TotalBalance = 1000, UserId = 3, TradingUnit = "gram", TotalGoods = 100 });
+            context.GoodsAccount.Add(new GoodsAccount { AccountId = 4, AccountType = 3, TotalBalance = 5000, UserId = 4, TradingUnit = "gram", TotalGoods = 500 });
+
+            context.SharesAccount.Add(new SharesAccount { AccountId = 5, AccountType = 1, TotalBalance = 500, UserId = 5, ShareholderPercentage = 76, TotalShare = 10, Totalbonds = 1 });
+            context.SharesAccount.Add(new SharesAccount { AccountId = 6, AccountType = 1, TotalBalance = 1000, UserId = 6, ShareholderPercentage = 56, TotalShare = 100, Totalbonds = 3 });
             context.SaveChanges();
             Console.Clear();
         }
@@ -98,6 +104,7 @@ namespace PaymentGatewayApi
             Console.WriteLine("Please select below option to continue");
             Console.WriteLine("1. Buy");
             Console.WriteLine("2. Sell");
+            Console.WriteLine("3. Print Statement");
             Console.WriteLine("0. Exit");
             start:
             Console.WriteLine("Enter your choice:");
@@ -111,6 +118,9 @@ namespace PaymentGatewayApi
 
                 case 2:
                     transaction.sell(LogggedUser, GoodsAccount);
+                    break;
+                case 3:
+                    transaction.printStatement(LogggedUser, GoodsAccount);
                     break;
 
                 case 0:
@@ -174,6 +184,7 @@ namespace PaymentGatewayApi
             Console.WriteLine("1. Buy Share");
             Console.WriteLine("2. Sell Share");
             Console.WriteLine("3. Transfer Share");
+            Console.WriteLine("4. Print Statement");
             Console.WriteLine("0. Exit");
         start:
             Console.WriteLine("Enter your choice:");
@@ -190,6 +201,9 @@ namespace PaymentGatewayApi
 
                 case 3:
                     transactions.transfer(LogggedUser, SharesAccount);
+                    break;
+                case 4:
+                    transactions.printStatement(LogggedUser, SharesAccount);
                     break;
                 case 0:
                     break;

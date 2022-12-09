@@ -12,5 +12,7 @@ namespace PaymentGateway.Core.Interfaces
         public bool buy(User user, GoodsAccount account);
 
         public bool sell(User user, GoodsAccount account);
+
+        public bool printStatement(User user, GoodsAccount account);
     }
 }

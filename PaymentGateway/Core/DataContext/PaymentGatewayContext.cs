@@ -15,6 +15,10 @@ namespace PaymentGateway.Core.DataContext
 
         public DbSet<BankStatement> bankStatements { get; set; }
 
+        public DbSet<GoodsStatement> goodsStatements { get; set; }
+
+        public DbSet<ShareStatement> shareStatements { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseInMemoryDatabase(databaseName: "PaymentGateway");

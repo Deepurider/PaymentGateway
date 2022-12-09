@@ -8,9 +8,9 @@ namespace PaymentGateway.Core.Models
 {
     public class GoodsAccount : Account
     {
-        public string Goods { get; set; }   
+        public int TotalGoods { get; set; }   
 
-        public int Amount { get; set; } 
+        public int TotalBalance { get; set; } 
 
         public string TradingUnit { get; set; }
     }

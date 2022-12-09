@@ -31,6 +31,7 @@ namespace PaymentGateway.Core.Classes
             _context.bankStatements.Add(bankStatement);
             _context.SaveChanges();
             Console.WriteLine("Your Current Balance:" + account.BalanceAmount);
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
             return true;    
         }
@@ -45,12 +46,15 @@ namespace PaymentGateway.Core.Classes
             Console.WriteLine("Enter Transfered Account Id :");
             transferAccountId = Convert.ToInt32(Console.ReadLine());
 
+
+
             if(transferMoney != 0 && transferAccountId != 0){
                 BankAccount bankAccount = _context.BankAccount.Where(x => x.AccountId == account.AccountId).FirstOrDefault();
                 BankAccount transferBankAccount = _context.BankAccount.Where(x => x.AccountId == transferAccountId).FirstOrDefault();
 
                 if (transferBankAccount == null) {
                     Console.WriteLine("Account Id not found");
+                    Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     return false;   
                 }
@@ -64,6 +68,7 @@ namespace PaymentGateway.Core.Classes
                 _context.bankStatements.Add(transferbankStatement);
                 _context.SaveChanges();
                 Console.WriteLine("Your Current Balance:" + account.BalanceAmount);
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 return true;
             }
@@ -81,6 +86,7 @@ namespace PaymentGateway.Core.Classes
 
             if (withdrawMoney > bankAccount.BalanceAmount) {
                 Console.WriteLine("No sufficient Balance in your bank amount");
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey(); 
                 return false;
             }
@@ -90,20 +96,22 @@ namespace PaymentGateway.Core.Classes
             _context.bankStatements.Add(bankStatement);
             _context.SaveChanges();
             Console.WriteLine("Your Current Balance:" + account.BalanceAmount);
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
             return true;
         }
 
         public bool printStatement(User user, BankAccount account)
         {
-            Console.WriteLine("*********************** Account Statement ****************** AccountId: " + account.AccountId + " ***********************");
+            Console.WriteLine("*********************** Bank Account Statement ****************** AccountId: " + account.AccountId + " ***********************");
             List<BankStatement> bankStatements = _context.bankStatements.Where(x => x.AccountId == account.AccountId).ToList();
             Console.WriteLine("Account Id\t\tCreditAmount\t\tDebitAmount\t\tTransactionTime");
             foreach (BankStatement bankStatement in bankStatements)
             {
-                Console.WriteLine(bankStatement.AccountId + "\t\t\t" + bankStatement.CreditAmount + "\t\t\t" + bankStatement.DebitAmount + "\t\t\t" + bankStatement.TransactionTime.ToShortDateString());
+                Console.WriteLine(bankStatement.AccountId + "\t\t\t" + bankStatement.CreditAmount + "\t\t\t" + bankStatement.DebitAmount + "\t\t\t" + bankStatement.TransactionTime.ToString());
             }
             Console.WriteLine("Total Account Balance : " + account.BalanceAmount);
+            Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
             return true;
         }
